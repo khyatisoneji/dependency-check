@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: dependency-check-pipeline-run
+spec:
+  pipelineRef:
+    name: dependency-check-pipeline
+  workspaces:
+    - name: report
+      persistentvolumeclaim:
+        claimName: report
+
+# Change link to git_url and manifest-file-name according to target repository
+  params:
+    - name: language
+      value: 1
+    - name: file_url
+      value: https://github.com/khyatisoneji/Dock-K8s-Tkn/blob/main/Database-UI-GoServer/go.mod # Replace it with URL of manifest file to be scanned for demo.
+
+    - name: manifest-file-path
+
+    - name: pkg-installation-directory-path
+      value: site-package
+
+    - name: report-file-path
+      value: crda-report.json
+
+    - name: image
+      value: quay.io/ksoneji/crda

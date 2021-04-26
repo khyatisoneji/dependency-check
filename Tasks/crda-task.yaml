@@ -1,0 +1,81 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+
+metadata:
+  name: crda-task
+
+spec:
+  description: >-
+    Code ready dependency analysis is a tool by RedHat which checks for any dependency vulnerabilities. CRDA currently supports Golang, NPM, Python and Java (maven) 
+  workspaces:
+    - name: output
+      description: Volume of Workspace where all reports and dependencies are installed
+
+  params:
+    - name: language
+      description: Integer value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
+
+    - name: manifest-file-path
+      description: Path of the manifest file to perform analysis.
+
+    - name: report-file-path
+      description: Path of the file to save analysis report.
+
+    - name: pkg-installation-directory-path
+      description: Path of a directory in workspace, where dependencies will be installed.
+
+    - name: image
+      description: Image of the specific language which is used by CRDA to perform analysis
+
+  steps:
+    - name: crda-task
+      image: $(params.image)
+      workingDir: $(workspaces.output.path)
+
+      script: |
+        #!/bin/sh
+
+        #setting path to dependency directory
+        printf "Setting the paths\n"
+        if [ $(params.language) == 1 ]
+        then
+          export GOPATH=$(params.pkg-installation-directory-path)
+        elif [ $(params.language) == 2 ]
+        then
+          export export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
+        elif [ $(params.language) == 3 ]
+        then
+          export PYTHONPATH=$(params.pkg-installation-directory-path)
+        else
+          export MAVEN_HOME=$(params.pkg-installation-directory-path)
+        fi
+
+        printf "Path set successfully\n"
+        printf "\nGenerating report"
+
+        #Getting the report using the CRDA
+        result = $(crda analyse --file $(params.manifest-file-path) -j)
+        exit_code = $?
+
+        #Save exit code to check in next stage if task completed successfully or not
+
+        #In case of failure
+        if [ $(exit_code) == 1 ]
+        then
+          printf "CRDA failed, saving the exit code...\n"
+          jq -n {} | \
+          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          $(params.report-file-path)
+
+        #Save the report and exit Code
+        else
+          printf "Report generated successfully, saving the report and exit code...\n"
+          jq -n {} | \
+          jq '.  + [{"report": $(result)}]' | \
+          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          $(params.report-file-path)
+        fi
+
+        printf "Successfully saved the report and exit code\n"
+
+
