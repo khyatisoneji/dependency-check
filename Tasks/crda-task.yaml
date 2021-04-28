@@ -13,7 +13,7 @@ spec:
 
   params:
     - name: language
-      description: Integer value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
+      description: String value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
 
     - name: manifest-file-path
       description: Path of the manifest file to perform analysis.
@@ -37,13 +37,13 @@ spec:
 
         #setting path to dependency directory
         printf "Setting the paths\n"
-        if [ $(params.language) == 1 ]
+        if [ $(params.language) == "1" ]
         then
           export GOPATH=$(params.pkg-installation-directory-path)
-        elif [ $(params.language) == 2 ]
+        elif [ $(params.language) == "2" ]
         then
           export export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
-        elif [ $(params.language) == 3 ]
+        elif [ $(params.language) == "3" ]
         then
           export PYTHONPATH=$(params.pkg-installation-directory-path)
         else

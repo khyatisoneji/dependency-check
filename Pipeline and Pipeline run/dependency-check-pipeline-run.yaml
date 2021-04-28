@@ -12,12 +12,11 @@ spec:
 
 # Change link to git_url and manifest-file-name according to target repository
   params:
-    - name: language
-      value: 1
-    - name: file_url
-      value: https://github.com/khyatisoneji/Dock-K8s-Tkn/blob/main/Database-UI-GoServer/go.mod # Replace it with URL of manifest file to be scanned for demo.
+    - name: repository
+      value: https://github.com/khyatisoneji/Dock-K8s-Tkn
 
     - name: manifest-file-path
+      value: go.mod
 
     - name: pkg-installation-directory-path
       value: site-package

@@ -11,7 +11,7 @@ spec:
   # Task parameters take values from global parameters  
   params:
     - name: language
-      description: Integer value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
+      description: String value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
 
     - name: file_url
       description: URL of the manifest file
@@ -36,16 +36,16 @@ spec:
         curl $(params.file_url) --output $(params.manifest-file-path)
 
         #Based on the ecosystem install dependencies
-        if [ $(params.language) !ne 3 ]
+        if [ $(params.language) -ne "4" ]
         then
           mv $(params.manifest-file-path) ./$(params.pkg-installation-directory-path)
           cd $(params.pkg-installation-directory-path)
 
-          if [ $(params.language) == 1 ]
+          if [ $(params.language) == "1" ]
           then
             go mod download
 
-          elif [ $(params.language) == 2 ]
+          elif [ $(params.language) == "2" ]
           then
             npm install
 

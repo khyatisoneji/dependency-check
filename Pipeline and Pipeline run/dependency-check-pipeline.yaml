@@ -8,8 +8,7 @@ spec:
     - name: report
 
   params:
-    - name: language
-    - name: file_url
+    - name: repository
     - name: pkg-installation-directory-path
       default: dependency-directory
     - name: manifest-file-path
@@ -18,17 +17,30 @@ spec:
     - name: image
 
   tasks:
+    - name: git-clone-repo
+      workspaces:
+        - name: report
+          workspace: report
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.repository)
+        - name: deleteExisting
+          value: "true"
     - name: setup-env
       taskRef:
         name: setup-env
+      runAfter:
+        - git-clone-repo
       workspaces:
         - name: report
           workspace: report
       params:
         - name: language
-          value: $(params.language)
+          value: "1"
         - name: file_url
-          value: $(params.file_url)
+          value: Database-UI-GoServer/go.mod
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
         - name: manifest-file-path
@@ -45,6 +57,8 @@ spec:
         - name: report
           workspace: report
       params:
+        - name: language
+          value: "1"
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
         - name: manifest-file-path
