@@ -10,7 +10,6 @@ spec:
       persistentvolumeclaim:
         claimName: report
 
-# Change link to git_url and manifest-file-name according to target repository
   params:
     - name: file_url
       value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
