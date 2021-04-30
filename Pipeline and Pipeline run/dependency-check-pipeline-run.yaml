@@ -12,14 +12,17 @@ spec:
 
 # Change link to git_url and manifest-file-name according to target repository
   params:
-    - name: repository
-      value: https://github.com/khyatisoneji/Dock-K8s-Tkn
+    - name: file_url
+      value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
+    
+    - name: language
+      value: "1"
 
     - name: manifest-file-path
       value: go.mod
 
     - name: pkg-installation-directory-path
-      value: site-package
+      value: dependency-directory
 
     - name: report-file-path
       value: crda-report.json

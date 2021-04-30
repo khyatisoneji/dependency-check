@@ -8,43 +8,40 @@ spec:
     - name: report
 
   params:
-    - name: repository
+    - name: file_url
+
+    - name: language
+
+    - name: manifest-file-path
+
     - name: pkg-installation-directory-path
       default: dependency-directory
-    - name: manifest-file-path
+
     - name: report-file-path
       default: crda-report.json
+      
     - name: image
 
   tasks:
-    - name: git-clone-repo
-      workspaces:
-        - name: report
-          workspace: report
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: $(params.repository)
-        - name: deleteExisting
-          value: "true"
     - name: setup-env
       taskRef:
         name: setup-env
-      runAfter:
-        - git-clone-repo
       workspaces:
         - name: report
           workspace: report
       params:
         - name: language
-          value: "1"
+          value: $(params.language)
+
         - name: file_url
-          value: Database-UI-GoServer/go.mod
+          value: $(params.file_url)
+
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
+
         - name: manifest-file-path
           value: $(params.manifest-file-path)
+
         - name: image
           value: $(params.image)
 
@@ -58,12 +55,16 @@ spec:
           workspace: report
       params:
         - name: language
-          value: "1"
+          value: $(params.language)
+
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
+
         - name: manifest-file-path
           value: $(params.manifest-file-path)
+
         - name: image
           value: $(params.image)
+          
         - name: report-file-path
           value: $(params.report-file-path)
