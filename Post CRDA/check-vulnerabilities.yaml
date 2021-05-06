@@ -1,0 +1,71 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+
+metadata:
+  name: check-vulnerabilities
+
+spec:
+  description: >-
+    This is the task for checking if all the vulnerabilities are within limits; if not then break the build
+  workspaces:
+    - name: report
+      description: Volume of Workspace where all reports and dependencies are installed
+    
+  # Task parameters take values from global parameters  
+  params:
+    - name: total-vulnerabilities
+      description: Maximum number of vulnerabilities allowed
+
+    - name: critical-vulnerabilities
+      description: Maximum number of critical vulnerabilities allowed
+    
+    - name: high-vulnerabilities
+      description: Maximum number of high vulnerabilities allowed
+    
+    - name: medium-vulnerabilities
+      description: Maximum number of medium vulnerabilities allowed
+    
+    - name: low-vulnerabilities
+      description: Maximum number of low vulnerabilities allowed
+
+    - name: report-file-url
+      description: URL of the CRDA report
+    
+    - name: report-file-path
+      description: Path of the file to save analysis report.
+      
+
+  # Task definition
+  steps:
+    - name: check-vulnerabilities
+      image: $(params.image)
+      script: |
+        #!bin/sh
+
+        curl $(params.report-file-url) --output $(params.report-file-path)
+
+        total_vulnerabilities = $(jq .total_vulnerabilities $(params.report-file-path))
+        critical_vulnerabilities = $(jq .critical_vulnerabilities $(params.report-file-path))
+        high_vulnerabilities = $(jq .high_vulnerabilities $(params.report-file-path))
+        medium_vulnerabilities = $(jq .medium_vulnerabilities $(params.report-file-path))
+        low_vulnerabilities = $(jq .low_vulnerabilities $(params.report-file-path))
+
+        if [ $(total_vulnerabilities) -gt  expr $(params.total-vulnerabilities) + 0 ]; then
+          printf "\nBUILD FAILED: Total vulnerabilities count is more than threshold value\n"
+        fi
+
+        if [ $(critical_vulnerabilities) -gt  expr $(params.critical-vulnerabilities) + 0 ]; then
+          printf "\nBUILD FAILED: Critical vulnerabilities count is more than threshold value\n"
+
+        if [ $(high_vulnerabilities) -gt  expr $(params.high-vulnerabilities) + 0 ]; then
+          printf "\nBUILD FAILED: High vulnerabilities count is more than threshold value\n"
+        fi
+
+        if [ $(medium_vulnerabilities) -gt  expr $(params.medium-vulnerabilities) + 0 ]; then
+          printf "\nBUILD FAILED: Medium vulnerabilities count is more than threshold value\n"
+        fi
+
+        if [ $(low_vulnerabilities) -gt  expr $(params.low-vulnerabilities) + 0 ]; then
+          printf "\nBUILD FAILED: Low vulnerabilities count is more than threshold value\n"
+        fi
+        

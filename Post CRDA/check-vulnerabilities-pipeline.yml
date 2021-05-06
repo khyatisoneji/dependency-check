@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: check-vulnerabilities-pipeline
+
+spec:
+  workspaces:
+    - name: report
+
+  params:
+    - name: total-vulnerabilities
+
+    - name: critical-vulnerabilities
+    
+    - name: high-vulnerabilities
+    
+    - name: medium-vulnerabilities
+    
+    - name: low-vulnerabilities
+      
+    - name: report-file-url
+
+    - name: report-file-path
+      default: crda-report.json
+      
+
+  tasks:
+    - name: check-vulnerabilities
+      taskRef:
+        name: check-vulnerabilities
+      workspaces:
+        - name: report
+          workspace: report
+      params:   
+        - name: total-vulnerabilities
+          value: $(params.total-vulnerabilities)
+
+        - name: critical-vulnerabilities
+          value: $(params.critical-vulnerabilities)
+        
+        - name: high-vulnerabilities
+          value: $(params.high-vulnerabilities)
+        
+        - name: medium-vulnerabilities
+          value: $(params.medium-vulnerabilities)
+        
+        - name: low-vulnerabilities
+          value: $(params.low-vulnerabilities)
+          
+        - name: report-file-url
+          value: $(params.report-file-url)
+
+        - name: report-file-path
+          value: $(params.report-file-path)
