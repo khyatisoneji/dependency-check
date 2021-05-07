@@ -89,15 +89,15 @@ spec:
         then
           printf "CRDA failed, saving the exit code...\n"
           jq -n {} | \
-          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
+          jq '.  + [{"exit_code": $(exit_code)}]' > \
           $(params.report-file-path)
 
         #Save the report and exit Code
         else
           printf "Report generated successfully, saving the report and exit code...\n"
           jq -n {} | \
-          jq --argjson result "$result" '. + {report: $result}' | \
-          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
+          jq '.  + [{"report": $(result)}]' | \
+          jq '.  + [{"exit_code": $(exit_code)}]' > \
           $(params.report-file-path)
         fi
 
