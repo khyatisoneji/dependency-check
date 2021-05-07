@@ -8,11 +8,12 @@ spec:
     - name: report
 
   params:
-    - name: file_url
+    - name: file-url
 
     - name: language
 
     - name: manifest-file-path
+      default: go.mod
 
     - name: pkg-installation-directory-path
       default: dependency-directory
@@ -33,8 +34,8 @@ spec:
         - name: language
           value: $(params.language)
 
-        - name: file_url
-          value: $(params.file_url)
+        - name: file-url
+          value: $(params.file-url)
 
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)

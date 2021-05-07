@@ -53,8 +53,8 @@ spec:
         printf "\nGenerating report"
 
         #Getting the report using the CRDA
-        result = $(crda analyse --file $(params.manifest-file-path) -j)
-        exit_code = $?
+        result=$(crda analyse $(params.manifest-file-path) -j)
+        exit_code=$?
 
         #Save exit code to check in next stage if task completed successfully or not
 

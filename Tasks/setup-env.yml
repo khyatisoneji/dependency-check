@@ -16,7 +16,7 @@ spec:
     - name: language
       description: String value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
 
-    - name: file_url
+    - name: file-url
       description: URL of the manifest file
 
     - name: manifest-file-path
@@ -34,9 +34,9 @@ spec:
     - name: setup-env
       image: $(params.image)
       script: |
-        #!bin/sh
+        #!/bin/sh
         mkdir -p $(params.pkg-installation-directory-path)
-        curl $(params.file_url) --output $(params.manifest-file-path)
+        curl $(params.file-url) --output $(params.manifest-file-path)
 
         #Based on the ecosystem install dependencies
         if [ $(params.language) -ne "4" ]

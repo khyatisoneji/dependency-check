@@ -11,7 +11,7 @@ spec:
         claimName: report
 
   params:
-    - name: file_url
+    - name: file-url
       value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
     
     - name: language
