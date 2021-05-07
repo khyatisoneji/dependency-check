@@ -26,13 +26,38 @@ spec:
 
     - name: image
       description: Image of the specific language which is used by CRDA to perform analysis
+    
+    - name: crda-host
+      description: CRDA host
+      default: ""
 
   steps:
     - name: crda-task
       image: $(params.image)
+      workingDir: $(workspaces.report.path)
+      env:
+        - name: CRDA_KEY
+          valueFrom:
+            secretKeyRef:
+              name: crda
+              key: crda-key
+        - name: AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: token
+              key: auth-token
+        - name: HOST
+          value: $(params.crda-host)
 
       script: |
         #!/bin/sh
+
+        mkdir -p $HOME/.crda
+        touch $HOME/.crda/config.yaml
+        echo auth_token: ${AUTH_TOKEN} >> $HOME/.crda/config.yaml
+        echo crda_key: ${CRDA_KEY} >> $HOME/.crda/config.yaml
+        echo host: ${HOST} >> $HOME/.crda/config.yaml
+        echo $(ls)
 
         #setting path to dependency directory
         printf "Setting the paths\n"
@@ -41,7 +66,7 @@ spec:
           export GOPATH=$(params.pkg-installation-directory-path)
         elif [ $(params.language) == "2" ]
         then
-          export export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
+          export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
         elif [ $(params.language) == "3" ]
         then
           export PYTHONPATH=$(params.pkg-installation-directory-path)
@@ -50,28 +75,29 @@ spec:
         fi
 
         printf "Path set successfully\n"
-        printf "\nGenerating report"
+        printf "\nGenerating report\n"
 
         #Getting the report using the CRDA
         result=$(crda analyse $(params.manifest-file-path) -j)
+        echo $result
         exit_code=$?
 
         #Save exit code to check in next stage if task completed successfully or not
 
         #In case of failure
-        if [ $(exit_code) == 1 ]
+        if [ $exit_code == 1 ]
         then
           printf "CRDA failed, saving the exit code...\n"
           jq -n {} | \
-          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
           $(params.report-file-path)
 
         #Save the report and exit Code
         else
           printf "Report generated successfully, saving the report and exit code...\n"
           jq -n {} | \
-          jq '.  + [{"report": $(result)}]' | \
-          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          jq --argjson result "$result" '. + {report: $result}' | \
+          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
           $(params.report-file-path)
         fi
 

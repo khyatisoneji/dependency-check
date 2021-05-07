@@ -13,7 +13,6 @@ spec:
     - name: language
 
     - name: manifest-file-path
-      default: go.mod
 
     - name: pkg-installation-directory-path
       default: dependency-directory
