@@ -10,8 +10,6 @@ spec:
   params:
     - name: file-url
 
-    - name: language
-
     - name: manifest-file-path
 
     - name: pkg-installation-directory-path
@@ -30,9 +28,6 @@ spec:
         - name: report
           workspace: report
       params:
-        - name: language
-          value: $(params.language)
-
         - name: file-url
           value: $(params.file-url)
 
@@ -45,18 +40,15 @@ spec:
         - name: image
           value: $(params.image)
 
-    - name: crda-task
+    - name: python-crda-task
       taskRef:
-        name: crda-task
+        name: python-crda-task
       runAfter:
         - setup-env
       workspaces:
         - name: report
           workspace: report
       params:
-        - name: language
-          value: $(params.language)
-
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
 

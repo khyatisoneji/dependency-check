@@ -12,13 +12,10 @@ spec:
 
   params:
     - name: file-url
-      value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
-    
-    - name: language
-      value: "1"
+      value: https://raw.githubusercontent.com/khyatisoneji/dependency-check/requirements.txt
 
     - name: manifest-file-path
-      value: go.mod
+      value: requirements.txt
 
     - name: pkg-installation-directory-path
       value: dependency-directory
@@ -27,4 +24,4 @@ spec:
       value: crda-report.json
 
     - name: image
-      value: quay.io/ksoneji/crda
+      value: quay.io/ksoneji/crda:python

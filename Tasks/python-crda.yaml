@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 
 metadata:
-  name: crda-task
+  name: python-crda-task
 
 spec:
   description: >-
@@ -12,9 +12,6 @@ spec:
       description: Volume of Workspace where all reports and dependencies are installed
 
   params:
-    - name: language
-      description: String value for each language; 1 = Golang, 2 = NPM, 3 = Python, 4 = Java
-
     - name: manifest-file-path
       description: Path of the manifest file to perform analysis.
 
@@ -32,7 +29,7 @@ spec:
       default: ""
 
   steps:
-    - name: crda-task
+    - name: python-crda-task
       image: $(params.image)
       workingDir: $(workspaces.report.path)
       env:
@@ -61,25 +58,13 @@ spec:
 
         #setting path to dependency directory
         printf "Setting the paths\n"
-        if [ $(params.language) == "1" ]
-        then
-          export GOPATH=$(params.pkg-installation-directory-path)
-        elif [ $(params.language) == "2" ]
-        then
-          export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
-        elif [ $(params.language) == "3" ]
-        then
-          export PYTHONPATH=$(params.pkg-installation-directory-path)
-        else
-          export MAVEN_HOME=$(params.pkg-installation-directory-path)
-        fi
+        export PYTHONPATH=$(params.pkg-installation-directory-path)
 
         printf "Path set successfully\n"
         printf "\nGenerating report\n"
 
         #Getting the report using the CRDA
         result=$(crda analyse $(params.manifest-file-path) -j)
-        echo $result
         exit_code=$?
 
         #Save exit code to check in next stage if task completed successfully or not
@@ -102,5 +87,3 @@ spec:
         fi
 
         printf "Successfully saved the report and exit code\n"
-
-
