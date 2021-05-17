@@ -21,9 +21,6 @@ spec:
     - name: image
       description: Image of the specific language which is used by CRDA to perform analysis
     
-    - name: crda-image
-      description: Imagine of CRDA
-    
     - name: crda-host
       description: CRDA host
       default: ""
@@ -63,6 +60,7 @@ spec:
         printf "\nGenerating report\n"
         #Getting the report using the CRDA
         result=$(crda analyse $(params.manifest-file-path) -j)
+        echo $result
         exit_code=$?
 
         #Save exit code to check in next stage if task completed successfully or not

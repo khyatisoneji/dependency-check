@@ -1,7 +1,6 @@
-FROM centos:latest
-RUN rpm -i https://github.com/fabric8-analytics/cli-tools/releases/download/v0.2.0/crda_0.2.0_Linux-64bit.rpm
-RUN yum install jq -y
+FROM registry.access.redhat.com/ubi8/ubi
+RUN yum install -y python3; yum clean all && ln -s /usr/bin/python3 /usr/bin/python
 
-FROM python:3
-RUN pip install --no-cache-dir --upgrade pip
-CMD ["cat", "/etc/os-release"]
+RUN rpm -i https://github.com/fabric8-analytics/cli-tools/releases/download/v0.1.2/crda_0.1.2_Linux-64bit.rpm
+
+RUN yum install jq -y

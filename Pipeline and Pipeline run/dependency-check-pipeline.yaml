@@ -59,9 +59,6 @@ spec:
 
         - name: image
           value: $(params.image)
-        
-        - name: crda-image
-          value: $(params.crda-image)
           
         - name: report-file-path
           value: $(params.report-file-path)

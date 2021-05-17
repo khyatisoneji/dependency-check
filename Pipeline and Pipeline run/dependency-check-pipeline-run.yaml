@@ -25,6 +25,3 @@ spec:
 
     - name: image
       value: quay.io/ksoneji/crda:python
-    
-    - name: crda-image
-      value: quay.io/ksoneji/crda:latest
