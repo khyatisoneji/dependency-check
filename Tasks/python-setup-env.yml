@@ -7,9 +7,6 @@ metadata:
 spec:
   description: >-
     This is the task for installing the packages depending on the ecosystem.
-  workspaces:
-    - name: report
-      description: Volume of Workspace where all reports and dependencies are installed
     
   # Task parameters take values from global parameters  
   params:
@@ -37,7 +34,11 @@ spec:
         curl $(params.file-url) --output $(params.manifest-file-path)
 
         printf "Installing dependencies...\n"
+        
         pip3 install --target=$(params.pkg-installation-directory-path) \
         -r $(params.manifest-file-path) --upgrade
-
+        
         printf "Successfully installed dependencies\n"
+  workspaces:
+    - name: report
+      description: Volume of Workspace where all reports and dependencies are installed
