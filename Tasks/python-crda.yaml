@@ -6,7 +6,10 @@ metadata:
 
 spec:
   description: >-
-    Code ready dependency analysis is a tool by RedHat which checks for any dependency vulnerabilities. CRDA currently supports Golang, NPM, Python and Java (maven) 
+    Code ready dependency analysis is a tool by RedHat which checks for any dependency vulnerabilities. CRDA currently supports Golang, NPM, Python and Java (maven). 
+  workspaces:
+    - name: report
+      description: Volume of Workspace where all reports and dependencies are installed.
 
   params:
     - name: manifest-file-path
@@ -19,7 +22,7 @@ spec:
       description: Path of a directory in workspace, where dependencies will be installed.
 
     - name: image
-      description: Image of the specific language which is used by CRDA to perform analysis
+      description: Image of the specific language which is used by CRDA to perform analysis.
     
     - name: crda-host
       description: CRDA host
@@ -59,8 +62,8 @@ spec:
 
         printf "\nGenerating report\n"
         #Getting the report using the CRDA
-        result=$(crda analyse $(params.manifest-file-path) -j)
-        echo $result
+        report=$(crda analyse $(params.manifest-file-path) -j)
+        echo $report
         exit_code=$?
 
         #Save exit code to check in next stage if task completed successfully or not
@@ -69,17 +72,14 @@ spec:
         then
           printf "CRDA failed, saving the exit code...\n"
           jq -n {} | \
-          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
           $(params.report-file-path)
         #Save the report and exit Code
         else
           printf "Report generated successfully, saving the report and exit code...\n"
           jq -n {} | \
-          jq '.  + [{"report": $(result)}]' | \
-          jq '.  + [{"exit_code": $(exit_code)}]' > \
+          jq --argjson report "$report" '. + {report: $report}' | \
+          jq --arg exit_code "$exit_code" '. + {exit_code: $exit_code}' > \
           $(params.report-file-path)
         fi
         printf "Successfully saved the report and exit code\n"
-  workspaces:
-    - name: report
-      description: Volume of Workspace where all reports and dependencies are installed

@@ -25,3 +25,18 @@ spec:
 
     - name: image
       value: quay.io/ksoneji/crda:python
+    
+    - name: total-vulnerabilities
+      value: "3"
+
+    - name: critical-vulnerabilities
+      value: "0"
+    
+    - name: high-vulnerabilities
+      value: "0"
+    
+    - name: medium-vulnerabilities
+      value: "2"
+    
+    - name: low-vulnerabilities
+      value: "3"

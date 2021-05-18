@@ -20,12 +20,20 @@ spec:
       
     - name: image
 
-    - name: crda-image
+    - name: total-vulnerabilities
+
+    - name: critical-vulnerabilities
+    
+    - name: high-vulnerabilities
+    
+    - name: medium-vulnerabilities
+    
+    - name: low-vulnerabilities
 
   tasks:
-    - name: setup-env
+    - name: python-setup-env
       taskRef:
-        name: setup-env
+        name: python-setup-env
       workspaces:
         - name: report
           workspace: report
@@ -46,7 +54,7 @@ spec:
       taskRef:
         name: python-crda-task
       runAfter:
-        - setup-env
+        - python-setup-env
       workspaces:
         - name: report
           workspace: report
@@ -62,3 +70,33 @@ spec:
           
         - name: report-file-path
           value: $(params.report-file-path)
+
+    - name: check-vulnerabilities
+      taskRef:
+        name: check-vulnerabilities
+      runAfter:
+        - python-crda-task
+      workspaces:
+        - name: report
+          workspace: report
+      params:   
+        - name: total-vulnerabilities
+          value: $(params.total-vulnerabilities)
+
+        - name: critical-vulnerabilities
+          value: $(params.critical-vulnerabilities)
+        
+        - name: high-vulnerabilities
+          value: $(params.high-vulnerabilities)
+        
+        - name: medium-vulnerabilities
+          value: $(params.medium-vulnerabilities)
+        
+        - name: low-vulnerabilities
+          value: $(params.low-vulnerabilities)
+
+        - name: report-file-path
+          value: $(params.report-file-path)
+        
+        - name: image
+          value: $(params.image)

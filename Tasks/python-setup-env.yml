@@ -2,11 +2,14 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 
 metadata:
-  name: setup-env
+  name: python-setup-env
 
 spec:
   description: >-
     This is the task for installing the packages depending on the ecosystem.
+  workspaces:
+    - name: report
+      description: Volume of Workspace where all reports and dependencies are installed.
     
   # Task parameters take values from global parameters  
   params:
@@ -20,12 +23,12 @@ spec:
       description: Path of a directory in workspace, where dependencies will be installed.
 
     - name: image
-      description: Image of the specific language which is used by CRDA to perform analysis
+      description: Image of the specific language which is used by CRDA to perform analysis.
       
 
   # Task definition
   steps:
-    - name: setup-env
+    - name: python-setup-env
       image: $(params.image)
       workingDir: $(workspaces.report.path)
       script: |
@@ -39,6 +42,4 @@ spec:
         -r $(params.manifest-file-path) --upgrade
         
         printf "Successfully installed dependencies\n"
-  workspaces:
-    - name: report
-      description: Volume of Workspace where all reports and dependencies are installed
+
