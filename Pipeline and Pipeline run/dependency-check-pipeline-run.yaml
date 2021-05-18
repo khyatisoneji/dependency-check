@@ -13,9 +13,6 @@ spec:
   params:
     - name: file-url
       value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
-    
-    - name: language
-      value: "1"
 
     - name: manifest-file-path
       value: go.mod
@@ -27,4 +24,20 @@ spec:
       value: crda-report.json
 
     - name: image
-      value: quay.io/ksoneji/crda
+      value: quay.io/ksoneji/crda:golang
+    
+    - name: total-vulnerabilities
+      value: "3"
+
+    - name: critical-vulnerabilities
+      value: "0"
+    
+    - name: high-vulnerabilities
+      value: "0"
+    
+    - name: medium-vulnerabilities
+      value: "2"
+    
+
+    - name: low-vulnerabilities
+      value: "3"
