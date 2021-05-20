@@ -12,7 +12,7 @@ spec:
 
   params:
     - name: file-url
-      value: https://raw.githubusercontent.com/khyatisoneji/dependency-check/python-lang/requirements.txt
+      value: 
 
     - name: manifest-file-path
       value: requirements.txt
@@ -24,7 +24,7 @@ spec:
       value: crda-report.json
 
     - name: image
-      value: quay.io/ksoneji/crda:python
+      value: quay.io/ksoneji/crda:maven
     
     - name: total-vulnerabilities
       value: "3"

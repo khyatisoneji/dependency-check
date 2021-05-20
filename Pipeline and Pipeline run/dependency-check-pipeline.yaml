@@ -31,9 +31,9 @@ spec:
     - name: low-vulnerabilities
 
   tasks:
-    - name: python-setup-env
+    - name: maven-setup-env
       taskRef:
-        name: python-setup-env
+        name: maven-setup-env
       workspaces:
         - name: report
           workspace: report
@@ -50,11 +50,11 @@ spec:
         - name: image
           value: $(params.image)
 
-    - name: python-crda-task
+    - name: maven-crda-task
       taskRef:
-        name: python-crda-task
+        name: maven-crda-task
       runAfter:
-        - python-setup-env
+        - maven-setup-env
       workspaces:
         - name: report
           workspace: report
@@ -75,7 +75,7 @@ spec:
       taskRef:
         name: check-vulnerabilities
       runAfter:
-        - python-crda-task
+        - maven-crda-task
       workspaces:
         - name: report
           workspace: report

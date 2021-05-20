@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 
 metadata:
-  name: python-crda-task
+  name: maven-crda-task
 
 spec:
   description: >-
@@ -29,7 +29,7 @@ spec:
       default: ""
 
   steps:
-    - name: python-crda-task
+    - name: maven-crda-task
       image: $(params.image)
       workingDir: $(workspaces.report.path)
       env:
@@ -57,7 +57,7 @@ spec:
 
         #setting path to dependency directory
         printf "Setting the paths\n"
-        export PYTHONPATH=$(params.pkg-installation-directory-path)
+        export MAVEN_HOME=$(params.pkg-installation-directory-path)
         printf "Path set successfully\n"
 
         printf "\nGenerating report\n"
