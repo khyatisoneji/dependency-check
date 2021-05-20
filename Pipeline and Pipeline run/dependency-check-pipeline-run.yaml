@@ -12,10 +12,10 @@ spec:
 
   params:
     - name: file-url
-      value: 
+      value: https://raw.githubusercontent.com/khyatisoneji/dependency-check/java-lang/pom.xml
 
     - name: manifest-file-path
-      value: requirements.txt
+      value: pom.xml
 
     - name: pkg-installation-directory-path
       value: dependency-directory
@@ -23,8 +23,11 @@ spec:
     - name: report-file-path
       value: crda-report.json
 
-    - name: image
+    - name: crda-image
       value: quay.io/ksoneji/crda:maven
+    
+    - name: maven-image
+      value: maven
     
     - name: total-vulnerabilities
       value: "3"

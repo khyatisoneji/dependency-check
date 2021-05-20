@@ -22,17 +22,22 @@ spec:
     - name: pkg-installation-directory-path
       description: Path of a directory in workspace, where dependencies will be installed.
 
-    - name: image
-      description: Image of the specific language which is used by CRDA to perform analysis.
+    - name: maven-image
+      description: Docker Maven Image.
       
 
   # Task definition
   steps:
     - name: maven-setup-env
-      image: $(params.image)
+      image: $(params.maven-image)
       workingDir: $(workspaces.report.path)
       script: |
         #!/bin/sh
+
+        mkdir -p $(params.pkg-installation-directory-path)
+        curl $(params.file-url) --output $(params.manifest-file-path)
+        echo $(ls)
+        
         mv $(params.manifest-file-path) ./$(params.pkg-installation-directory-path)
         cd $(params.pkg-installation-directory-path)
 

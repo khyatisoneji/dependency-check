@@ -36,16 +36,16 @@ spec:
     - name: report-file-path
       description: Path of the file to save analysis report.
     
-    - name: image
+    - name: crda-image
       
 
   # Task definition
   steps:
     - name: check-vulnerabilities
-      image: $(params.image)
+      image: $(params.crda-image)
       workingDir: $(workspaces.report.path)
       script: |
-        #!bin/sh
+        #!/bin/sh
 
         exit_code = $(jq .exit_code $(params.report-file-path))
         echo $exit_code
