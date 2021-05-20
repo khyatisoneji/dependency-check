@@ -45,7 +45,9 @@ spec:
       image: $(params.image)
       workingDir: $(workspaces.report.path)
       script: |
-        #!bin/sh
+        #!/bin/sh
+
+        echo $(ls)
 
         exit_code = $(jq .exit_code $(params.report-file-path))
         echo $exit_code
