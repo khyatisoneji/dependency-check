@@ -33,15 +33,16 @@ spec:
       workingDir: $(workspaces.report.path)
       script: |
         #!/bin/sh
-        mkdir -p $(params.pkg-installation-directory-path)/vendor
+        mkdir -p $(params.pkg-installation-directory-path)
         curl $(params.file-url) --output $(params.manifest-file-path)
 
         echo $(ls)
         mv $(params.manifest-file-path) ./$(params.pkg-installation-directory-path)
         cd $(params.pkg-installation-directory-path)
 
-        go mod download
-        go list
+        go list -e $(go list -m all)
+        cd pkg/
+        echo $(ls)
 
         cd ..
         mv ./$(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
