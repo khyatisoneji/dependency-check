@@ -43,6 +43,7 @@ spec:
         go list -e $(go list -m all)
         cd pkg/
         echo $(ls)
+        cd ..
 
         cd ..
         mv ./$(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
