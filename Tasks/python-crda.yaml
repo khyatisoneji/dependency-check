@@ -45,6 +45,8 @@ spec:
               key: auth-token
         - name: HOST
           value: $(params.crda-host)
+        - name: CONSENT_TELEMETRY
+          value: "false" 
 
       script: |
         #!/bin/sh
