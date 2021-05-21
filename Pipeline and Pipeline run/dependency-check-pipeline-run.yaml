@@ -23,11 +23,8 @@ spec:
     - name: report-file-path
       value: crda-report.json
 
-    - name: crda-image
-      value: quay.io/ksoneji/crda:maven
-    
-    - name: golang-image
-      value: golang
+    - name: image
+      value: quay.io/ksoneji/crda:golang
     
     - name: total-vulnerabilities
       value: "3"

@@ -22,18 +22,18 @@ spec:
     - name: pkg-installation-directory-path
       description: Path of a directory in workspace, where dependencies will be installed.
 
-    - name: golang-image
-      description: Docker Golang Image.
+    - name: image
+      description: Image of the specific language which is used by CRDA to perform analysis.
       
 
   # Task definition
   steps:
     - name: golang-setup-env
-      image: $(params.golang-image)
+      image: $(params.image)
       workingDir: $(workspaces.report.path)
       script: |
         #!/bin/sh
-        mkdir -p $(params.pkg-installation-directory-path)
+        mkdir -p $(params.pkg-installation-directory-path)/vendor
         curl $(params.file-url) --output $(params.manifest-file-path)
 
         echo $(ls)
@@ -41,6 +41,7 @@ spec:
         cd $(params.pkg-installation-directory-path)
 
         go mod download
+        go list
 
         cd ..
         mv ./$(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
