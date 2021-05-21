@@ -21,16 +21,30 @@ spec:
     - name: pkg-installation-directory-path
       description: Path of a directory in workspace, where dependencies will be installed.
 
-    - name: image
-      description: Image of the specific language which is used by CRDA to perform analysis.
+    - name: crda-image
+      description: CRDA Image for Dependency Scanning.
+    
+    - name: golang-image
+      description: Docker Golang Image.
     
     - name: crda-host
       description: CRDA host
       default: ""
 
   steps:
+    - name: golang-setpath
+      image: $(params.golang-image)
+      workingDir: $(workspaces.report.path)
+      script: |
+        #!/bin/sh
+
+        #setting path to dependency directory
+        printf "Setting the paths\n"
+        export GOPATH=$(params.pkg-installation-directory-path)
+        printf "Path set successfully\n"
+
     - name: golang-crda-task
-      image: $(params.image)
+      image: $(params.crda-image)
       workingDir: $(workspaces.report.path)
       env:
         - name: CRDA_KEY
@@ -55,11 +69,6 @@ spec:
         echo crda_key: ${CRDA_KEY} >> $HOME/.crda/config.yaml
         echo host: ${HOST} >> $HOME/.crda/config.yaml
         echo $(ls)
-
-        #setting path to dependency directory
-        printf "Setting the paths\n"
-        export GOPATH=$(params.pkg-installation-directory-path)
-        printf "Path set successfully\n"
 
         printf "\nGenerating report\n"
         #Getting the report using the CRDA
