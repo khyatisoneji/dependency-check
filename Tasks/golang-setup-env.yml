@@ -8,14 +8,11 @@ spec:
   description: >-
     This is the task for installing the packages depending on the ecosystem.
   workspaces:
-    - name: report
+    - name: output
       description: Volume of Workspace where all reports and dependencies are installed.
     
   # Task parameters take values from global parameters  
   params:
-    - name: file-url
-      description: URL of the manifest file.
-
     - name: manifest-file-path
       description: Path of the manifest file to perform analysis.
 
@@ -30,21 +27,18 @@ spec:
   steps:
     - name: golang-setup-env
       image: $(params.image)
-      workingDir: $(workspaces.report.path)
+      workingDir: $(workspaces.output.path)
       script: |
         #!/bin/sh
-        mkdir -p $(params.pkg-installation-directory-path)
-        curl $(params.file-url) --output $(params.manifest-file-path)
+        
+        echo $GOPATH
+        echo $PWD
+
+        printf "Installing dependencies\n"
 
         echo $(ls)
-        mv $(params.manifest-file-path) ./$(params.pkg-installation-directory-path)
-        cd $(params.pkg-installation-directory-path)
-
-        go list -e $(go list -m all)
-        cd pkg/
+        go version
+        go mod vendor
         echo $(ls)
-        cd ..
 
-        cd ..
-        mv ./$(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
-        echo $(ls)
+        printf "Dependencies installed in Vendor Directory\n"

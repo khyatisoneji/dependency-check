@@ -5,10 +5,10 @@ metadata:
 
 spec:
   workspaces:
-    - name: report
+    - name: output
 
   params:
-    - name: file-url
+    - name: repository
 
     - name: manifest-file-path
 
@@ -31,16 +31,26 @@ spec:
     - name: low-vulnerabilities
 
   tasks:
+    - name: clone-git-repo
+      workspaces:
+      - name: output
+        workspace: output
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.repository)
+        - name: deleteExisting
+          value: "true"
     - name: golang-setup-env
       taskRef:
         name: golang-setup-env
+      runAfter:
+        - clone-git-repo
       workspaces:
-        - name: report
-          workspace: report
+        - name: output
+          workspace: output
       params:
-        - name: file-url
-          value: $(params.file-url)
-
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
 
@@ -56,8 +66,8 @@ spec:
       runAfter:
         - golang-setup-env
       workspaces:
-        - name: report
-          workspace: report
+        - name: output
+          workspace: output
       params:
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
@@ -77,8 +87,8 @@ spec:
       runAfter:
         - golang-crda-task
       workspaces:
-        - name: report
-          workspace: report
+        - name: output
+          workspace: output
       params:   
         - name: total-vulnerabilities
           value: $(params.total-vulnerabilities)

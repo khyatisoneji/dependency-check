@@ -6,13 +6,13 @@ spec:
   pipelineRef:
     name: dependency-check-pipeline
   workspaces:
-    - name: report
+    - name: output
       persistentvolumeclaim:
-        claimName: report
+        claimName: output
 
   params:
-    - name: file-url
-      value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
+    - name: repository
+      value: https://github.com/tektoncd/cli
 
     - name: manifest-file-path
       value: go.mod
@@ -37,7 +37,6 @@ spec:
     
     - name: medium-vulnerabilities
       value: "2"
-    
 
     - name: low-vulnerabilities
       value: "3"
