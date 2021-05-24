@@ -21,10 +21,10 @@ spec:
     - name: pkg-installation-directory-path
       description: Path of a directory in workspace, where dependencies will be installed.
 
-    - name: crda-image
+    - name: image
       description: CRDA Image for Dependency Scanning.
     
-    - name: maven-image
+    - name: image
       description: Docker Maven Image.
     
     - name: crda-host
@@ -32,17 +32,8 @@ spec:
       default: ""
 
   steps:
-    - name: maven-set-path
-      image: $(params.maven-image)
-      workingDir: $(workspaces.report.path)
-      script: |
-        #setting path to dependency directory
-        printf "Setting the paths\n"
-        export MAVEN_HOME=$(params.pkg-installation-directory-path)
-        printf "Path set successfully\n"
-  
     - name: maven-crda-task
-      image: $(params.crda-image)
+      image: $(params.image)
       workingDir: $(workspaces.report.path)
       env:
         - name: CRDA_KEY
@@ -60,6 +51,12 @@ spec:
 
       script: |
         #!/bin/sh
+
+        #setting path to dependency directory
+        printf "Setting the paths\n"
+        export MAVEN_HOME=$(params.pkg-installation-directory-path)
+        printf "Path set successfully\n"
+
         mkdir -p $HOME/.crda
         touch $HOME/.crda/config.yaml
         echo auth_token: ${AUTH_TOKEN} >> $HOME/.crda/config.yaml

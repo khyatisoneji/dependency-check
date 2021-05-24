@@ -36,52 +36,54 @@ spec:
     - name: report-file-path
       description: Path of the file to save analysis report.
     
-    - name: crda-image
+    - name: image
       
 
   # Task definition
   steps:
     - name: check-vulnerabilities
-      image: $(params.crda-image)
+      image: $(params.image)
       workingDir: $(workspaces.report.path)
       script: |
         #!/bin/sh
 
-        exit_code = $(jq .exit_code $(params.report-file-path))
+        echo $(ls)
+
+        exit_code=$(jq .exit_code $(params.report-file-path))
         echo $exit_code
 
-        if [$(exit_code) -eq 1]
+        if [ $exit_code == "1" ]
         then
           printf "\nCRDA Test failed, please perform the test again\n"
         else
-          total_vulnerabilities = $(jq .report.total_vulnerabilities $(params.report-file-path))
-          critical_vulnerabilities = $(jq .report.critical_vulnerabilities $(params.report-file-path))
-          high_vulnerabilities = $(jq .report.high_vulnerabilities $(params.report-file-path))
-          medium_vulnerabilities = $(jq .report.medium_vulnerabilities $(params.report-file-path))
-          low_vulnerabilities = $(jq .report.low_vulnerabilities $(params.report-file-path))
+          total_vulnerabilities=$(jq .report.total_vulnerabilities $(params.report-file-path))
+          critical_vulnerabilities=$(jq .report.critical_vulnerabilities $(params.report-file-path))
+          high_vulnerabilities=$(jq .report.high_vulnerabilities $(params.report-file-path))
+          medium_vulnerabilities=$(jq .report.medium_vulnerabilities $(params.report-file-path))
+          low_vulnerabilities=$(jq .report.low_vulnerabilities $(params.report-file-path))
 
-          if [ $(total_vulnerabilities) -gt  expr $(params.total-vulnerabilities) + 0 ]
+          if [ $total_vulnerabilities -gt  `expr $(params.total-vulnerabilities) + 0` ]
           then
             printf "\nBUILD FAILED: Total vulnerabilities count is more than threshold value\n"
           fi
 
-          if [ $(critical_vulnerabilities) -gt  expr $(params.critical-vulnerabilities) + 0 ]
+          if [ $critical_vulnerabilities -gt  `expr $(params.critical-vulnerabilities) + 0` ]
           then
             printf "\nBUILD FAILED: Critical vulnerabilities count is more than threshold value\n"
+          fi
 
-          if [ $(high_vulnerabilities) -gt  expr $(params.high-vulnerabilities) + 0 ]
+          if [ $high_vulnerabilities -gt  `expr $(params.high-vulnerabilities) + 0` ]
           then
             printf "\nBUILD FAILED: High vulnerabilities count is more than threshold value\n"
           fi
 
-          if [ $(medium_vulnerabilities) -gt  expr $(params.medium-vulnerabilities) + 0 ]
+          if [ $medium_vulnerabilities -gt  `expr $(params.medium-vulnerabilities) + 0` ]
           then
             printf "\nBUILD FAILED: Medium vulnerabilities count is more than threshold value\n"
           fi
 
-          if [ $(low_vulnerabilities) -gt  expr $(params.low-vulnerabilities) + 0 ]
+          if [ $low_vulnerabilities -gt  `expr $(params.low-vulnerabilities) + 0` ]
           then
             printf "\nBUILD FAILED: Low vulnerabilities count is more than threshold value\n"
           fi
         fi
-        

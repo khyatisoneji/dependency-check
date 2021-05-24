@@ -22,14 +22,14 @@ spec:
     - name: pkg-installation-directory-path
       description: Path of a directory in workspace, where dependencies will be installed.
 
-    - name: maven-image
+    - name: image
       description: Docker Maven Image.
       
 
   # Task definition
   steps:
     - name: maven-setup-env
-      image: $(params.maven-image)
+      image: $(params.image)
       workingDir: $(workspaces.report.path)
       script: |
         #!/bin/sh

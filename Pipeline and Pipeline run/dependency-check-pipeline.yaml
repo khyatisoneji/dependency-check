@@ -18,9 +18,7 @@ spec:
     - name: report-file-path
       default: crda-report.json
       
-    - name: crda-image
-
-    - name: maven-image
+    - name: image
 
     - name: total-vulnerabilities
 
@@ -49,8 +47,8 @@ spec:
         - name: manifest-file-path
           value: $(params.manifest-file-path)
 
-        - name: maven-image
-          value: $(params.maven-image)
+        - name: image
+          value: $(params.image)
 
     - name: maven-crda-task
       taskRef:
@@ -67,11 +65,8 @@ spec:
         - name: manifest-file-path
           value: $(params.manifest-file-path)
 
-        - name: crda-image
-          value: $(params.crda-image)
-
-        - name: maven-image
-          value: $(params.maven-image)
+        - name: image
+          value: $(params.image)
           
         - name: report-file-path
           value: $(params.report-file-path)
@@ -103,5 +98,5 @@ spec:
         - name: report-file-path
           value: $(params.report-file-path)
         
-        - name: crda-image
-          value: $(params.crda-image)
+        - name: image
+          value: $(params.image)
