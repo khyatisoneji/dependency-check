@@ -8,7 +8,7 @@ spec:
   description: >-
     Code ready dependency analysis is a tool by RedHat which checks for any dependency vulnerabilities. CRDA currently supports Golang, NPM, Python and Java (maven). 
   workspaces:
-    - name: report
+    - name: output
       description: Volume of Workspace where all reports and dependencies are installed.
 
   params:
@@ -34,7 +34,7 @@ spec:
   steps:
     - name: maven-crda-task
       image: $(params.image)
-      workingDir: $(workspaces.report.path)
+      workingDir: $(workspaces.output.path)
       env:
         - name: CRDA_KEY
           valueFrom:

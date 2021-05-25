@@ -8,14 +8,11 @@ spec:
   description: >-
     This is the task for installing the packages of maven/Java ecosystem.
   workspaces:
-    - name: report
+    - name: output
       description: Volume of Workspace where all reports and dependencies are installed.
     
   # Task parameters take values from global parameters  
   params:
-    - name: file-url
-      description: URL of the manifest file
-
     - name: manifest-file-path
       description: Path of the manifest file to perform analysis.
 
@@ -30,23 +27,16 @@ spec:
   steps:
     - name: maven-setup-env
       image: $(params.image)
-      workingDir: $(workspaces.report.path)
+      workingDir: $(workspaces.output.path)
       script: |
         #!/bin/sh
 
         mkdir -p $(params.pkg-installation-directory-path)
-        curl $(params.file-url) --output $(params.manifest-file-path)
         echo $(ls)
-        
-        mv $(params.manifest-file-path) ./$(params.pkg-installation-directory-path)
-        cd $(params.pkg-installation-directory-path)
 
         printf "Installing dependencies...\n"
         
-        mvn install
-
-        cd ..
-        mv ./$(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
+        mvn dependency:copy-dependencies -DoutputDirectory=$(params.pkg-installation-directory-path)
         
         printf "Successfully installed dependencies\n"
 

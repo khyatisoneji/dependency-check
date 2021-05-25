@@ -6,13 +6,13 @@ spec:
   pipelineRef:
     name: dependency-check-pipeline
   workspaces:
-    - name: report
+    - name: output
       persistentvolumeclaim:
-        claimName: report
+        claimName: output
 
   params:
-    - name: file-url
-      value: https://raw.githubusercontent.com/khyatisoneji/dependency-check/java-lang/pom.xml
+    - name: repository
+      value: https://github.com/jenkinsci/jenkins
 
     - name: manifest-file-path
       value: pom.xml

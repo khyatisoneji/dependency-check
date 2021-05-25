@@ -8,7 +8,7 @@ spec:
   description: >-
     This is the task for checking if all the vulnerabilities are within limits; if not then break the build.
   workspaces:
-    - name: report
+    - name: output
       description: Volume of Workspace where all reports and dependencies are installed.
     
   # Task parameters take values from global parameters  
@@ -43,7 +43,7 @@ spec:
   steps:
     - name: check-vulnerabilities
       image: $(params.image)
-      workingDir: $(workspaces.report.path)
+      workingDir: $(workspaces.output.path)
       script: |
         #!/bin/sh
 
