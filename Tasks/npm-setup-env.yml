@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 
 metadata:
-  name: maven-setup-env
+  name: npm-setup-env
 
 spec:
   description: >-
@@ -25,7 +25,7 @@ spec:
 
   # Task definition
   steps:
-    - name: maven-setup-env
+    - name: npm-setup-env
       image: $(params.image)
       workingDir: $(workspaces.output.path)
       script: |
@@ -33,10 +33,15 @@ spec:
 
         mkdir -p $(params.pkg-installation-directory-path)
         echo $(ls)
+        mv $(params.manifest-file-path) $(params.pkg-installation-directory-path)
+        cd $(params.pkg-installation-directory-path)
+        echo $(ls)
 
         printf "Installing dependencies...\n"
         
-        mvn dependency:copy-dependencies -DoutputDirectory=$(params.pkg-installation-directory-path)
+        npm install
+        cd ..
+        mv $(params.pkg-installation-directory-path)/$(params.manifest-file-path) .
         
         printf "Successfully installed dependencies\n"
 

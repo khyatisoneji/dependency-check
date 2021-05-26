@@ -12,10 +12,10 @@ spec:
 
   params:
     - name: repository
-      value: https://github.com/jenkinsci/jenkins
+      value: https://github.com/khyatisoneji/Dock-K8s-Tkn
 
     - name: manifest-file-path
-      value: pom.xml
+      value: app/package.json
 
     - name: pkg-installation-directory-path
       value: dependency-directory
@@ -24,7 +24,7 @@ spec:
       value: crda-report.json
 
     - name: image
-      value: quay.io/ksoneji/crda:maven
+      value: quay.io/ksoneji/crda:npm
     
     - name: total-vulnerabilities
       value: "3"

@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 
 metadata:
-  name: maven-crda-task
+  name: npm-crda-task
 
 spec:
   description: >-
@@ -32,7 +32,7 @@ spec:
       default: ""
 
   steps:
-    - name: maven-crda-task
+    - name: npm-crda-task
       image: $(params.image)
       workingDir: $(workspaces.output.path)
       env:
@@ -48,13 +48,15 @@ spec:
               key: auth-token
         - name: HOST
           value: $(params.crda-host)
+        - name: CONSENT_TELEMETRY
+          value: "false"
 
       script: |
         #!/bin/sh
 
         #setting path to dependency directory
         printf "Setting the paths\n"
-        export MAVEN_HOME=$(params.pkg-installation-directory-path)
+        export NPM_PATH=$(params.pkg-installation-directory-path):`npm root -g`
         printf "Path set successfully\n"
 
         mkdir -p $HOME/.crda

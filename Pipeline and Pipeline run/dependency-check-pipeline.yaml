@@ -42,9 +42,9 @@ spec:
           value: $(params.repository)
         - name: deleteExisting
           value: "true"
-    - name: maven-setup-env
+    - name: npm-setup-env
       taskRef:
-        name: maven-setup-env
+        name: npm-setup-env
       runAfter:
         - clone-git-repo
       workspaces:
@@ -61,11 +61,11 @@ spec:
         - name: image
           value: $(params.image)
 
-    - name: maven-crda-task
+    - name: npm-crda-task
       taskRef:
-        name: maven-crda-task
+        name: npm-crda-task
       runAfter:
-        - maven-setup-env
+        - npm-setup-env
       workspaces:
         - name: output
           workspace: output
@@ -86,7 +86,7 @@ spec:
       taskRef:
         name: check-vulnerabilities
       runAfter:
-        - maven-crda-task
+        - npm-crda-task
       workspaces:
         - name: output
           workspace: output
