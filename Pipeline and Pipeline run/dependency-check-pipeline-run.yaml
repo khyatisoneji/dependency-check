@@ -12,10 +12,10 @@ spec:
 
   params:
     - name: repository
-      value: https://github.com/khyatisoneji/Dock-K8s-Tkn
+      value: https://github.com/urvashigupta7/ToDoApp
 
     - name: manifest-file-path
-      value: app/package.json
+      value: package.json
 
     - name: pkg-installation-directory-path
       value: dependency-directory
