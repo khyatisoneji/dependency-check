@@ -6,19 +6,19 @@ spec:
   pipelineRef:
     name: dependency-check-pipeline
   workspaces:
-    - name: report
+    - name: output
       persistentvolumeclaim:
-        claimName: report
+        claimName: output
 
   params:
-    - name: file-url
-      value: https://raw.githubusercontent.com/khyatisoneji/Dock-K8s-Tkn/main/UI-GoServer/go.mod
-    
+    - name: repository
+      value: https://github.com/shashirajraja/onlinebookstore
+
     - name: language
-      value: "1"
+      value: "4"
 
     - name: manifest-file-path
-      value: go.mod
+      value: pom.xml
 
     - name: pkg-installation-directory-path
       value: dependency-directory
@@ -27,4 +27,19 @@ spec:
       value: crda-report.json
 
     - name: image
-      value: quay.io/ksoneji/crda
+      value: quay.io/ksoneji/crda:maven
+    
+    - name: total-vulnerabilities
+      value: "3"
+
+    - name: critical-vulnerabilities
+      value: "0"
+    
+    - name: high-vulnerabilities
+      value: "0"
+    
+    - name: medium-vulnerabilities
+      value: "2"
+
+    - name: low-vulnerabilities
+      value: "3"

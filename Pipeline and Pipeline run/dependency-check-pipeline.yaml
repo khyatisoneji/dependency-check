@@ -5,10 +5,10 @@ metadata:
 
 spec:
   workspaces:
-    - name: report
+    - name: output
 
   params:
-    - name: file-url
+    - name: repository
 
     - name: language
 
@@ -22,19 +22,39 @@ spec:
       
     - name: image
 
+    - name: total-vulnerabilities
+
+    - name: critical-vulnerabilities
+    
+    - name: high-vulnerabilities
+    
+    - name: medium-vulnerabilities
+    
+    - name: low-vulnerabilities
+
   tasks:
+    - name: clone-git-repo
+      workspaces:
+      - name: output
+        workspace: output
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.repository)
+        - name: deleteExisting
+          value: "true"
     - name: setup-env
       taskRef:
         name: setup-env
+      runAfter:
+        - clone-git-repo
       workspaces:
-        - name: report
-          workspace: report
+        - name: output
+          workspace: output
       params:
         - name: language
           value: $(params.language)
-
-        - name: file-url
-          value: $(params.file-url)
 
         - name: pkg-installation-directory-path
           value: $(params.pkg-installation-directory-path)
@@ -51,8 +71,8 @@ spec:
       runAfter:
         - setup-env
       workspaces:
-        - name: report
-          workspace: report
+        - name: output
+          workspace: output
       params:
         - name: language
           value: $(params.language)
@@ -68,3 +88,33 @@ spec:
           
         - name: report-file-path
           value: $(params.report-file-path)
+
+    - name: check-vulnerabilities
+      taskRef:
+        name: check-vulnerabilities
+      runAfter:
+        - crda-task
+      workspaces:
+        - name: output
+          workspace: output
+      params:   
+        - name: total-vulnerabilities
+          value: $(params.total-vulnerabilities)
+
+        - name: critical-vulnerabilities
+          value: $(params.critical-vulnerabilities)
+        
+        - name: high-vulnerabilities
+          value: $(params.high-vulnerabilities)
+        
+        - name: medium-vulnerabilities
+          value: $(params.medium-vulnerabilities)
+        
+        - name: low-vulnerabilities
+          value: $(params.low-vulnerabilities)
+
+        - name: report-file-path
+          value: $(params.report-file-path)
+        
+        - name: image
+          value: $(params.image)
